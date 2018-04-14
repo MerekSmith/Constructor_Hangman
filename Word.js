@@ -23,8 +23,10 @@ function Word(randomWord) {
 	};
 	this.userGuess = (guess) => {
 		for (let i = 0; i < letterObjectsArray.length; i++) {
-			letterObjectsArray[i].letterGuess(guess.toLowerCase());
-		}
+			if (letterObjectsArray[i].letterGuess(guess)) {
+				return true;
+			}
+		};
 	};
 	makeObjects(randomWord);
 };

@@ -3,6 +3,8 @@ var inquirer = require('inquirer');
 
 var hangmanWords = ['Disney', 'Ariel', 'Belle', 'Moana', 'Elsa', 'Anna', 'Castle', 'Princess', 'Prince', 'Mulan', 'Aurora'];
 var randomWord = "";
+
+// Initialize random word. 
 chooseWord();
 function chooseWord() {
 	randomWord = hangmanWords[Math.floor(Math.random() * hangmanWords.length)];
@@ -25,7 +27,11 @@ function hangmanGame() {
 			name: "userGuess"
 		}
 	]).then(function (guessResponse) {
-		newWord.userGuess(guessResponse.userGuess);
+		if (newWord.userGuess(guessResponse.userGuess)) {
+			console.log('CORRECT!!!');
+		} else {
+			console.log('INCORRECT!!!');
+		}
 		console.log(newWord.stringWord());
 		console.log(randomWord);
 	});

@@ -10,12 +10,13 @@ function Letter(letter) {
 		}
 	};
 	this.letterGuess = (guess) => {
-		if (guess === this.letter) {
+		if (guess.toLowerCase() === this.letter.toLowerCase()) {
 			this.guessed = true;
+			return true;
+
 		}
 	}
 };
-
 
 module.exports = Letter;
 
