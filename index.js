@@ -1,7 +1,7 @@
 var Word = require('./Word.js');
 var inquirer = require('inquirer');
 
-var hangmanWords = ['Disney', 'Ariel', 'Belle', 'Moana', 'Elsa', 'Anna', 'Castle', 'Princess', 'Prince', 'Mulan', 'Aurora'];
+var hangmanWords = ['Disney', 'Ariel', 'Belle', 'Moana', 'Elsa', 'Anna', 'Castle', 'Princess', 'Prince', 'Mulan', 'Aurora', 'Tiana', 'Snow White', 'Cinderella', 'Repunzel', 'Princess and the Frog', 'Beauty and the Beast', 'Brave', 'Merida', 'Sleeping Beauty', 'Frozen', 'Charming', 'Jasmine', 'Aladdin', 'Tangled'];
 var guesses = 10;
 var wins = 0;
 var losses = 0;
@@ -28,7 +28,6 @@ function restartGame() {
 			newWord = new Word(randomWord);
 			guesses = 10;
 			console.log(newWord.stringWord());
-			console.log(randomWord);
 			hangmanGame();
 		} else {
 			console.log('GOODBYE!! PLAY AGAIN SOON!!')
@@ -37,47 +36,47 @@ function restartGame() {
 };
 
 
-
 var newWord = new Word(randomWord);
 
 
-console.log('Get ready to play Hangman! Your word is below:')
+console.log('\nGet ready to play Hangman! Your word is below:')
 console.log(newWord.stringWord());
 
-console.log(randomWord);
+
 function hangmanGame() {
 
 	inquirer.prompt([
 		{
 			type: "input",
 			message: "Guess a letter!",
-			default: true,
 			name: "userGuess"
 		}
 	]).then(function (guessResponse) {
 		if (newWord.userGuess(guessResponse.userGuess)) {
-			console.log('\x1b[32m%s\x1b[0m%s', 'CORRECT!!!');
+			console.log('\x1b[32m%s\x1b[0m', '\nCORRECT!!!');
 			if (newWord.wordComplete()) {
-				console.log('You got it right!! Next word!')
+				console.log(randomWord);
+				console.log('\x1b[42m%s\x1b[0m','You got it right!! Next word!\n')
 				chooseWord();
 				guesses = 10;
 				newWord = new Word(randomWord)
 				console.log(newWord.stringWord());
-				console.log(randomWord);
 			} else {
 				console.log(newWord.stringWord());
-				console.log(randomWord);
 			}
 			hangmanGame();
 		} else {
 			guesses--;
-			console.log('\x1b[31m%s\x1b[0m', 'INCORRECT!!!');
+			console.log('\x1b[31m%s\x1b[0m', '\nINCORRECT!!!');
 			console.log('You have ' + guesses + ' guesses remaining!');
+			console.log(newWord.stringWord());
 			if (guesses === 0) {
+				console.log('\n---------------------------');
 				console.log('\x1b[31m%s\x1b[0m', 'Sorry, you ran out of guesses!');
-				console.log('The word was ' + randomWord + '!');
+				console.log('\x1b[41m%s\x1b[0m','The word was ' + randomWord + '!');
+				console.log('---------------------------\n');
 				restartGame();
-			} else {
+			} else {	
 				hangmanGame();
 			}
 		}
