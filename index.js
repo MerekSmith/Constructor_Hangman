@@ -6,6 +6,7 @@ var guesses = 10;
 var wins = 0;
 var losses = 0;
 var randomWord = "";
+var guessedLetters = [];
 
 // Initialize random word. 
 chooseWord();
@@ -22,11 +23,11 @@ function restartGame() {
 			name: "restart"
 		}
 	]).then(function (restartResponse) {
-		console.log(restartResponse.restart);
 		if (restartResponse.restart) {
 			chooseWord();
 			newWord = new Word(randomWord);
 			guesses = 10;
+			guessedLetters = [];
 			console.log(newWord.stringWord());
 			hangmanGame();
 		} else {
@@ -49,7 +50,16 @@ function hangmanGame() {
 		{
 			type: "input",
 			message: "Guess a letter!",
-			name: "userGuess"
+			name: "userGuess",
+			validate: function (value) {
+				if (isNaN(value) && !guessedLetters.includes(value.toLowerCase())) {
+					guessedLetters.push(value.toLowerCase());
+					return true;
+				} else {
+					console.log('\x1b[31mYou already guessed ' + value + '. Please try a new letter.\x1b[0m\n');
+					return false;
+				}
+			}
 		}
 	]).then(function (guessResponse) {
 		if (newWord.userGuess(guessResponse.userGuess)) {
@@ -59,6 +69,7 @@ function hangmanGame() {
 				console.log('\x1b[42m%s\x1b[0m','You got it right!! Next word!\n')
 				chooseWord();
 				guesses = 10;
+				guessedLetters = [];
 				newWord = new Word(randomWord)
 				console.log(newWord.stringWord());
 			} else {
@@ -68,8 +79,6 @@ function hangmanGame() {
 		} else {
 			guesses--;
 			console.log('\x1b[31m%s\x1b[0m', '\nINCORRECT!!!');
-			console.log('You have ' + guesses + ' guesses remaining!');
-			console.log(newWord.stringWord());
 			if (guesses === 0) {
 				console.log('\n---------------------------');
 				console.log('\x1b[31m%s\x1b[0m', 'Sorry, you ran out of guesses!');
@@ -77,6 +86,8 @@ function hangmanGame() {
 				console.log('---------------------------\n');
 				restartGame();
 			} else {	
+				console.log('You have ' + guesses + ' guesses remaining!');
+				console.log(newWord.stringWord());
 				hangmanGame();
 			}
 		}
